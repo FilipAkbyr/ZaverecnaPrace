@@ -1,71 +1,119 @@
-'use client';
-
-import {authUtils} from "../firebase/auth-utils";
-import {useRouter} from 'next/router';
-import React, {FormEvent} from 'react';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  Grid,
+  Link,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { NextPage } from 'next';
-import { Container, Grid, Paper, Input, Button } from '@mui/material';
-import Link from 'next/link';
+import NextLink from 'next/link';
+import React, { useState } from 'react';
+import {authUtils} from "../firebase/auth-utils";
+import router from 'next/router';
 
-export const Register: NextPage = () =>
-{
-    const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const router = useRouter();
+const Login: NextPage = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleForm = async (event: FormEvent) => {
+  const handleForm = async (event: any) => {
     event.preventDefault();
-    await authUtils.register(email, password);
+    const registerResult = await authUtils.register(email, password);
     return router.push('/');
   };
+
+  const buttonHover = {
+    "&:hover": {
+      backgroundColor: 'blue',
+      color: 'black'
+    },
+  };
+
   return (
-  <Container maxWidth="sm" component="form" noValidate onSubmit={handleForm}>
-  <Grid
-    container
-    spacing={2}
-    direction="column"
-    justifyContent="center"
-    style={{ minHeight: '100vh' }}
-  >
-    <Paper elevation={2} sx={{ padding: 5 }}>
-      <Grid container direction="column" spacing={2}>
-        <Grid item>
-          <Input
-            fullWidth
-            required
-            onChange={(e) => setEmail(e.target.value)}
-            type="email"
-            name="email"
-            id="email"
-            placeholder="Email"
-          />
-        </Grid>
-        <Grid item>
-          <Input
-            fullWidth
-            required
-            onChange={(e) => setPassword(e.target.value)}
-            type="password"
-            name="password"
-            id="password"
-            placeholder="Password"
-          />
-        </Grid>
-        <Grid item>
-          <Button fullWidth variant="contained" type="submit">
-            Registrovat se
-          </Button>
-        </Grid>
-        <Grid item>
-          <Link href="/login">
-            <Button fullWidth variant="outlined">
-              Stránka přihlášení
-            </Button>
-          </Link>
-        </Grid>
-      </Grid>
-    </Paper>
-  </Grid>
-</Container>);
-}
-export default Register;
+      <Box
+        width="100vw"
+        height="100vh"
+        top={0}
+        sx={{ bgcolor: 'white', position: 'absolute', zIndex: -1 }}
+      >
+        <Container
+          component="main"
+          maxWidth="xs"
+          sx={{ pb: '2  5px', border: '2px solid black', borderRadius: '20px', mt: '10%' }}
+        >
+          <Box
+            sx={{
+              padding: '25px 0',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <Avatar sx={{ m: 1, bgcolor: 'blue' }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Registrace
+            </Typography>
+            <Box
+              component="form"
+              onSubmit={handleForm}
+              noValidate
+              sx={{ mt: 1 }}
+            >
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Zadejte email adresu"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                color="info"
+                onChange={(e) => {
+                  const { value } = e.target;
+                  setEmail(value);
+                }}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Zadejte heslo"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                color="info"
+                onChange={(e) => {
+                  const { value } = e.target;
+                  setPassword(value);
+                }}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2, backgroundColor: 'black', color: 'white', ...buttonHover }}
+              >
+                Registrovat se
+              </Button>
+              <Grid container>
+                <Grid item>
+                  <Link component={NextLink} href="/login" variant="body2" sx={{ color: 'black', textDecorationColor: 'black' }}>
+                    Už máte účet?
+                  </Link>
+                </Grid>
+              </Grid>
+            </Box>
+          </Box>
+        </Container>
+      </Box>
+  );
+};
+
+export default Login;
