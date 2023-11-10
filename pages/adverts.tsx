@@ -1,31 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, Typography } from '@mui/material';
+import { db } from '../firebase/config';
 import { collection, getDocs } from 'firebase/firestore';
-import { firestore } from '../server/firebase-admin-config';
-
-
-const db = firestore();
-
-async function fetchDataFromFirestore() {
-  try {
-    const querySnapshot = await getDocs(collection(db, "properties"));
-    const data = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-    return data;
-  } catch (error) {
-    console.error("Error fetching data from Firestore:", error);
-    return [];
-  }
-}
-
+import { House } from '../generated/graphql';
 
 const PropertyList = () => {
-  const [properties, setProperties] = useState([]);
+  const [properties, setProperties] = useState<House[]>([]);
 
   useEffect(() => {
-    fetchDataFromFirestore().then(data => setProperties(data));
+    const getProperties = async () => {
+      const propertiesRef = collection(db, 'properties');
+      const querySnapshot = await getDocs(propertiesRef);
+      const docs = querySnapshot.docs.map(doc => doc.data() as House);
+      setProperties(docs);
+    };
+    getProperties();
   }, []);
 
   return (
+    <>
       {properties.map(property => (
         <Card key={property.id}>
           <CardContent>
@@ -35,7 +28,9 @@ const PropertyList = () => {
           </CardContent>
         </Card>
       ))}
+    </>
   );
 };
 
 export default PropertyList;
+

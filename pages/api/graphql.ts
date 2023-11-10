@@ -3,7 +3,7 @@ import { gql } from 'graphql-tag';
 import { DecodedIdToken } from 'firebase-admin/auth';
 import { firestore } from 'firebase-admin';
 import { verifyToken } from '../../server/verifyToken';
-import { properties } from '../generated/graphql';
+import { House } from '../../generated/graphql';
 
 
 type Context = {
@@ -38,13 +38,13 @@ const db = firestore();
 const resolvers = {
       Query: {
         property: async () => {
-          const houseRef = db.collection('properties') as FirebaseFirestore.CollectionReference<properties>;
+          const houseRef = db.collection('properties') as FirebaseFirestore.CollectionReference<House>;
           const docsRefs = await houseRef.listDocuments();
           const docsSnapshotPromises = docsRefs.map((doc) => doc.get());
           const docsSnapshots = await Promise.all(docsSnapshotPromises);
           const docs = docsSnapshots.map((doc) => doc.data()!);
           console.log(docs);
-          return docs.map((doc) => ({ name: doc.adresa }));
+          return docs.map((doc) => ({ name: doc.description }));
         },
       },
       Mutation: {
