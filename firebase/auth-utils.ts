@@ -3,8 +3,8 @@ import {
     getAuth,
     signInWithEmailAndPassword,
   } from 'firebase/auth';
+  import { firebase_app } from './config';
   
-  import firebase_app from './config';
   
   const auth = getAuth(firebase_app);
   
@@ -20,4 +20,6 @@ import {
     },
     getCurrentUser: () => auth.currentUser,
   };
+
+  
   

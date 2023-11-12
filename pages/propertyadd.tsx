@@ -1,5 +1,4 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import { useMutation } from '@apollo/client';
 import { useAddHouseMutationMutation } from '../generated/graphql';
 import { Container, TextField, Button } from '@mui/material';
 
@@ -23,9 +22,9 @@ const DynamicPropertyForm: React.FC = () => {
 
     try {
       const newProperty = {
-        id: '', 
-        description: '',
-        price: 0, 
+        id: formData.propertyId, 
+        description: formData.propertyName,
+        price: parseInt(formData.propertyValue), 
         ...formData,
       };
 
@@ -40,38 +39,49 @@ const DynamicPropertyForm: React.FC = () => {
   };
 
   return (
-    <Container>
-        <h1>Dynamic Property Addition</h1>
+    <Container maxWidth="sm">
+      <h1 style={{ textAlign: 'center' }}>Dynamic Property Addition</h1>
       <form onSubmit={handleSubmit}>
-      <TextField
+        <TextField
+          fullWidth
           id="propertyId"
           name="propertyId"
           label="Property ID"
           value={formData.propertyId}
           onChange={handleInputChange}
           required
+          margin="normal"
         />
         <TextField
+          fullWidth
           id="propertyName"
           name="propertyName"
           label="Property Name"
           value={formData.propertyName}
           onChange={handleInputChange}
           required
+          margin="normal"
         />
         <TextField
+          fullWidth
           id="propertyValue"
           name="propertyValue"
           label="Property Value"
           value={formData.propertyValue}
           onChange={handleInputChange}
           required
+          margin="normal"
         />
-        <Button variant="contained" color="primary" type="submit">
+        <Button
+          variant="contained"
+          color="primary"
+          type="submit"
+          style={{ marginTop: 20 }}
+        >
           Add Property
         </Button>
       </form>
-    </Container>  
+    </Container>
   );
 };
 

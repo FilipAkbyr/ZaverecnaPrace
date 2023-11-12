@@ -21,13 +21,13 @@ const typeDefs = gql`
   }
 
   type House {
-    id: ID!
+    id: ID
     description: String!
     price: Int!
   }
 
   type Mutation {
-      addHouse(id: ID!, description: String!, price: Int!): House
+      addHouse(id: ID, description: String!, price: Int!): House
       deleteHouse(id: ID!): House
   }
   

@@ -18,7 +18,7 @@ export type Scalars = {
 export type House = {
   __typename?: 'House';
   description: Scalars['String'];
-  id: Scalars['ID'];
+  id?: Maybe<Scalars['ID']>;
   price: Scalars['Int'];
 };
 
@@ -31,7 +31,7 @@ export type Mutation = {
 
 export type MutationAddHouseArgs = {
   description: Scalars['String'];
-  id: Scalars['ID'];
+  id?: InputMaybe<Scalars['ID']>;
   price: Scalars['Int'];
 };
 
@@ -59,16 +59,16 @@ export type CurrentUserQuery = { __typename?: 'Query', user: Array<{ __typename?
 export type HouseQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type HouseQueryQuery = { __typename?: 'Query', property: Array<{ __typename?: 'House', id: string, description: string, price: number }> };
+export type HouseQueryQuery = { __typename?: 'Query', property: Array<{ __typename?: 'House', id?: string | null, description: string, price: number }> };
 
 export type AddHouseMutationMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id?: InputMaybe<Scalars['ID']>;
   description: Scalars['String'];
   price: Scalars['Int'];
 }>;
 
 
-export type AddHouseMutationMutation = { __typename?: 'Mutation', addHouse?: { __typename?: 'House', id: string, description: string, price: number } | null };
+export type AddHouseMutationMutation = { __typename?: 'Mutation', addHouse?: { __typename?: 'House', id?: string | null, description: string, price: number } | null };
 
 
 export const CurrentUserDocument = gql`
@@ -142,7 +142,7 @@ export type HouseQueryQueryHookResult = ReturnType<typeof useHouseQueryQuery>;
 export type HouseQueryLazyQueryHookResult = ReturnType<typeof useHouseQueryLazyQuery>;
 export type HouseQueryQueryResult = Apollo.QueryResult<HouseQueryQuery, HouseQueryQueryVariables>;
 export const AddHouseMutationDocument = gql`
-    mutation AddHouseMutation($id: ID!, $description: String!, $price: Int!) {
+    mutation AddHouseMutation($id: ID, $description: String!, $price: Int!) {
   addHouse(id: $id, description: $description, price: $price) {
     id
     description
