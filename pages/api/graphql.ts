@@ -1,9 +1,10 @@
 import { createYoga, createSchema } from 'graphql-yoga'
 import { gql } from 'graphql-tag';
 import { DecodedIdToken } from 'firebase-admin/auth';
-import { firestore } from 'firebase-admin';
 import { verifyToken } from '../../server/verifyToken';
 import { House } from '../../generated/graphql';
+import { firebase_app } from '../../firebase/config';
+import { firestore } from '../../server/firebase-admin-config';
 
 
 type Context = {
@@ -37,14 +38,15 @@ const db = firestore();
 
 const resolvers = {
       Query: {
-        property: async () => {
+        property: async (_root: any, _args: any) => {
           const houseRef = db.collection('properties') as FirebaseFirestore.CollectionReference<House>;
           const docsRefs = await houseRef.listDocuments();
           const docsSnapshotPromises = docsRefs.map((doc) => doc.get());
           const docsSnapshots = await Promise.all(docsSnapshotPromises);
-          const docs = docsSnapshots.map((doc) => doc.data()!);
+          const docs = docsSnapshots.map((doc) => doc.data());
           console.log(docs);
-          return docs.map((doc) => ({ name: doc.description }));
+          return docs;
+          // return docs.map((doc) => ({ name: doc.description }));
         },
       },
       Mutation: {
