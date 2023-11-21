@@ -1,6 +1,8 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { useAddHouseMutationMutation } from '../generated/graphql';
 import { Container, TextField, Button } from '@mui/material';
+import Navbar from '../components/navbar';
+import Head from 'next/head';
 
 
 const DynamicPropertyForm: React.FC = () => {
@@ -32,14 +34,18 @@ const DynamicPropertyForm: React.FC = () => {
         variables: newProperty,
       });
 
-      console.log('Property added successfully.');
+      alert('Property added successfully');
     } catch (error) {
+      alert('Error adding property');
       console.error('Mutation error:', error);
     }
   };
 
   return (
     <Container maxWidth="sm">
+      <Head>
+        <Navbar></Navbar>
+      </Head>
       <h1 style={{ textAlign: 'center' }}>Dynamic Property Addition</h1>
       <form onSubmit={handleSubmit}>
         <TextField

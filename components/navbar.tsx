@@ -11,7 +11,7 @@ import Link from 'next/link';
 export const Navbar = () => {
   return (
       <AppBar sx={{position: 'static', margin: '0px'}}>
-        <Toolbar>
+        <Toolbar sx={{justifyContent: "space-between"}}>
           <Tabs>
             <Link href="/">
             <Tab label="Home" />
@@ -19,6 +19,12 @@ export const Navbar = () => {
             
             <Tab label="About" />
             <Tab label="Contact" />
+            <Link href="/login">
+            <Tab label="Login" sx={{textDecorationColor: "white", color: "white"}} />
+            </Link>
+            <Link href="/register">
+            <Tab label="Signup" />
+            </Link>
           </Tabs>
         </Toolbar>
       </AppBar> 

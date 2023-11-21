@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, Skeleton, Typography } from '@mui/material';
 import { House, useHouseQueryQuery } from '../generated/graphql';
+import Navbar from '../components/navbar';
 
 const PropertyList = () => {
+  
   const [properties, setProperties] = useState<House[]>([]);
   const {data, loading} = useHouseQueryQuery();
   const idk = data?.property;
@@ -11,9 +13,11 @@ const PropertyList = () => {
       if (!loading)
         setProperties(data?.property as House[]);
   }, [data?.property, loading]);
+  
 
   return (
     <>
+      <Navbar></Navbar>
       {loading ? (
         <Skeleton
           animation="wave"
