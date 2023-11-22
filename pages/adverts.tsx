@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, Skeleton, Typography } from '@mui/material';
 import { House, useHouseQueryQuery } from '../generated/graphql';
 import Navbar from '../components/navbar';
+import Link from 'next/link';
 
 const PropertyList = () => {
   
@@ -27,8 +28,10 @@ const PropertyList = () => {
       ) : (
         properties.map(property => (
           <Card key={property.id}>
-            <CardContent>
+            <CardContent> 
+              <Link href="/propertydetail">
               <Typography variant="h5">Description: {property.description}</Typography>
+              </Link>
               <Typography variant="body1">ID: {property.id}</Typography>
               <Typography variant="body1">Price: {property.price}</Typography>
             </CardContent>

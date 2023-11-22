@@ -43,7 +43,7 @@ export type MutationDeleteHouseArgs = {
 export type Query = {
   __typename?: 'Query';
   property: Array<House>;
-  user: Array<User>;
+  users: Array<User>;
 };
 
 export type User = {
@@ -51,10 +51,10 @@ export type User = {
   name: Scalars['String'];
 };
 
-export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
+export type PeopleQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CurrentUserQuery = { __typename?: 'Query', user: Array<{ __typename?: 'User', name: string }> };
+export type PeopleQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', name: string }> };
 
 export type HouseQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -71,40 +71,40 @@ export type AddHouseMutationMutationVariables = Exact<{
 export type AddHouseMutationMutation = { __typename?: 'Mutation', addHouse?: { __typename?: 'House', id?: string | null, description: string, price: number } | null };
 
 
-export const CurrentUserDocument = gql`
-    query currentUser {
-  user {
+export const PeopleDocument = gql`
+    query people {
+  users {
     name
   }
 }
     `;
 
 /**
- * __useCurrentUserQuery__
+ * __usePeopleQuery__
  *
- * To run a query within a React component, call `useCurrentUserQuery` and pass it any options that fit your needs.
- * When your component renders, `useCurrentUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `usePeopleQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePeopleQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCurrentUserQuery({
+ * const { data, loading, error } = usePeopleQuery({
  *   variables: {
  *   },
  * });
  */
-export function useCurrentUserQuery(baseOptions?: Apollo.QueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
+export function usePeopleQuery(baseOptions?: Apollo.QueryHookOptions<PeopleQuery, PeopleQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, options);
+        return Apollo.useQuery<PeopleQuery, PeopleQueryVariables>(PeopleDocument, options);
       }
-export function useCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
+export function usePeopleLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PeopleQuery, PeopleQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, options);
+          return Apollo.useLazyQuery<PeopleQuery, PeopleQueryVariables>(PeopleDocument, options);
         }
-export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
-export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
-export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
+export type PeopleQueryHookResult = ReturnType<typeof usePeopleQuery>;
+export type PeopleLazyQueryHookResult = ReturnType<typeof usePeopleLazyQuery>;
+export type PeopleQueryResult = Apollo.QueryResult<PeopleQuery, PeopleQueryVariables>;
 export const HouseQueryDocument = gql`
     query HouseQuery {
   property {

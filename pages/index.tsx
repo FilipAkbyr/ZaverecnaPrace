@@ -1,8 +1,9 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import Navbar from "../components/navbar";
-import { useAuthContext } from "../components/auth-context-provider";
 import { Typography } from "@mui/material";
+import { useAuthContext } from "../components/auth-context-provider";
+
 
 export const Home: NextPage = () => 
 {

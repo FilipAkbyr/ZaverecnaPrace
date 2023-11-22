@@ -7,6 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Tab, Tabs } from '@mui/material';
 import Link from 'next/link';
+// import { HeaderProfileButton } from './navbar-avatar-icon';
 
 export const Navbar = () => {
   return (
@@ -14,18 +15,20 @@ export const Navbar = () => {
         <Toolbar sx={{justifyContent: "space-between"}}>
           <Tabs>
             <Link href="/">
-            <Tab label="Home" />
+            <Tab label="Home" sx={{textDecorationColor: "white", color: "white"}}/>
             </Link>
-            
+            <Link href="/adverts">
+            <Tab label="Offers" sx={{textDecorationColor: "white", color: "white"}}/>
+            </Link>
             <Tab label="About" />
-            <Tab label="Contact" />
-            <Link href="/login">
-            <Tab label="Login" sx={{textDecorationColor: "white", color: "white"}} />
+            <Link href="#">
+            <Tab label="Login" sx={{textDecorationColor: "white", color: "white"}}/>
             </Link>
             <Link href="/register">
-            <Tab label="Signup" />
+            <Tab label="Signup" sx={{textDecorationColor: "white", color: "white"}}/>
             </Link>
           </Tabs>
+          {/* <HeaderProfileButton></HeaderProfileButton> */}
         </Toolbar>
       </AppBar> 
   );

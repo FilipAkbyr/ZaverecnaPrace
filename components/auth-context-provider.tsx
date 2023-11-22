@@ -21,7 +21,7 @@ export const AuthContextProvider: FC<PropsWithChildren> = ({ children }) => {
       if (authenticatedUser) {
         setUser(authenticatedUser);
       } else {
-        setUser(null);
+        setUser(undefined);
       }
       setLoading(false);
     });

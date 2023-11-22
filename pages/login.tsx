@@ -23,18 +23,16 @@ loginResult = false;
 const Login: NextPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
 
   const handleForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const loginResult = await authUtils.login(email, password);
     localStorage.setItem('loginState', JSON.stringify(loginResult));
-    if (rememberMe) {
-      localStorage.setItem('loginState', JSON.stringify(loginResult));
-    } else {
-      localStorage.removeItem('loginState');
-    }
-    return router.push('/');
+    // localStorage.setItem('currentUserEmail', JSON.stringify(email));
+    if(loginResult == true)
+    {
+      return router.push('/');
+    }    
   };
 
   const buttonHover = {
@@ -105,16 +103,6 @@ const Login: NextPage = () => {
                   const { value } = e.target;
                   setPassword(value);
                 }}
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    value={rememberMe}
-                    onChange={() => setRememberMe(!rememberMe)}
-                    color="info"
-                  />
-                }
-                label="Zapamatovat si mě"
               />
               <Button
                 type="submit"

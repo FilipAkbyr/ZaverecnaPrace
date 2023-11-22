@@ -3,6 +3,7 @@ import { useAddHouseMutationMutation } from '../generated/graphql';
 import { Container, TextField, Button } from '@mui/material';
 import Navbar from '../components/navbar';
 import Head from 'next/head';
+import Link from 'next/link';
 
 
 const DynamicPropertyForm: React.FC = () => {

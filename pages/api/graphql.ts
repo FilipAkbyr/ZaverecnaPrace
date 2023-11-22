@@ -3,7 +3,6 @@ import { gql } from 'graphql-tag';
 import { DecodedIdToken } from 'firebase-admin/auth';
 import { verifyToken } from '../../server/verifyToken';
 import { House } from '../../generated/graphql';
-import { firebase_app } from '../../firebase/config';
 import { firestore } from '../../server/firebase-admin-config';
 
 
@@ -13,7 +12,7 @@ type Context = {
 
 const typeDefs = gql`
   type Query {
-    user: [User!]!
+    users: [User!]!
     property: [House!]!
   }
   
