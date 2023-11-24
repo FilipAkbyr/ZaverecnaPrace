@@ -13,7 +13,8 @@ type Context = {
 const typeDefs = gql`
   type Query {
     users: [User!]!
-    property: [House!]!
+    property(propertyId: ID!): House!
+    properties: [House!]!
   }
   
   type User {
@@ -37,21 +38,27 @@ const db = firestore();
 
 const resolvers = {
       Query: {
-        property: async (_root: any, _args: any) => {
+        properties: async (_root: any, _args: any) => {
           const houseRef = db.collection('properties') as FirebaseFirestore.CollectionReference<House>;
           const docsRefs = await houseRef.listDocuments();
           const docsSnapshotPromises = docsRefs.map((doc) => doc.get());
           const docsSnapshots = await Promise.all(docsSnapshotPromises);
-          const docs = docsSnapshots.map((doc) => doc.data());
+          const docs = docsSnapshots.map((doc) => ({...doc.data(), id: doc.id}));
           console.log(docs);
           return docs;
-          // return docs.map((doc) => ({ name: doc.description }));
+        },
+        property: async (_root: any, args: any) => {
+          console.log(args.propertyId);
+          const houseRef = db.doc(`/properties/${args.propertyId}`) as FirebaseFirestore.DocumentReference<House>;
+          const docSnapshot = await houseRef.get();
+          const doc = docSnapshot.data();
+          return {...doc, id: docSnapshot.id};
         },
       },
       Mutation: {
-        addHouse: async (_: any, {id, description, price}: {id: string, description: string, price: number}, __: any) => {
+        addHouse: async (_: any, { description, price}: { description: string, price: number}, __: any) => {
           const projectRef = db.collection('properties').doc();
-          const project = { id, description, price }; 
+          const project = {description, price }; 
           await projectRef.set(project);
           return project;
         },

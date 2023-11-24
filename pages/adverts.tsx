@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, Skeleton, Typography } from '@mui/material';
-import { House, useHouseQueryQuery } from '../generated/graphql';
+import { House, useHouseQueryQuery, useHousesQueryQuery } from '../generated/graphql';
 import Navbar from '../components/navbar';
 import Link from 'next/link';
 
 const PropertyList = () => {
   
   const [properties, setProperties] = useState<House[]>([]);
-  const {data, loading} = useHouseQueryQuery();
-  const idk = data?.property;
+  const {data, loading} = useHousesQueryQuery();
 
   useEffect(() => {
       if (!loading)
-        setProperties(data?.property as House[]);
-  }, [data?.property, loading]);
+        setProperties(data?.properties as House[]);
+  }, [data?.properties, loading]);
   
+  console.log(properties);
 
   return (
     <>
@@ -29,7 +29,7 @@ const PropertyList = () => {
         properties.map(property => (
           <Card key={property.id}>
             <CardContent> 
-              <Link href="/propertydetail">
+              <Link href={{pathname: "propertydetail/[id]", query: {propertyId: property.id}}} as={`propertydetail/${property.id}`}>
               <Typography variant="h5">Description: {property.description}</Typography>
               </Link>
               <Typography variant="body1">ID: {property.id}</Typography>

@@ -3,17 +3,24 @@ query people {
     name
   }
 }
-query HouseQuery{
-  property {
+query HousesQuery{
+  properties {
     id
     description
     price
   }
 }
 
-mutation AddHouseMutation($id: ID, $description: String!, $price: Int!) {
-  addHouse(id: $id, description: $description, price: $price) {
+query HouseQuery($propertyId: ID!) {
+  property(propertyId: $propertyId) {
     id
+    description
+    price
+  }
+}
+
+mutation AddHouseMutation($description: String!, $price: Int!) {
+  addHouse( description: $description, price: $price) {
     description
     price
   }

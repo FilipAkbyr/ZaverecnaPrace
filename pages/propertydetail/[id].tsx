@@ -1,16 +1,19 @@
 import { Button, TextField, Container, Typography, Grid } from "@mui/material";
-import { useState, useEffect, ChangeEvent } from "react";
-import { storage } from "../firebase/config";
+import { useState, useEffect, ChangeEvent, use } from "react";
+import { storage } from "../../firebase/config";
 import { ref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import Image from "next/image";
-import Navbar from "../components/navbar";
-import { useHouseQueryQuery } from "../generated/graphql";
+import Navbar from "../../components/navbar";
+import { useHouseQueryQuery } from "../../generated/graphql";
+import { Router, useRouter } from "next/router";
 
 const PropertyDetail = () => {
+  const router = useRouter();
+  // console.log(router.query.propertyId);
   const [imageList, setImageList] = useState<string[]>([]);
   const imageListRef = ref(storage, "images/");
-  const propertyData = useHouseQueryQuery();
+  const propertyData = useHouseQueryQuery({ variables: { propertyId: router.query.propertyId!.toString() } });
   
   const uploadImage = (image: File) => {
     if (image == null) return;
@@ -30,7 +33,7 @@ const PropertyDetail = () => {
         });
       });
     });
-  }, []);
+  }, [imageListRef]);
 
   return (
     <>
@@ -44,7 +47,7 @@ const PropertyDetail = () => {
             <TextField
               fullWidth
               variant="outlined"
-              value={propertyData.data?.property[0].description}
+              value={propertyData.data?.property.description}
               disabled={true}
             />
           </Grid>
@@ -52,7 +55,7 @@ const PropertyDetail = () => {
             <TextField
               fullWidth
               variant="outlined"
-              value={propertyData.data?.property[0].price}
+              value={propertyData.data?.property.price}
               disabled={true}
             />
           </Grid>

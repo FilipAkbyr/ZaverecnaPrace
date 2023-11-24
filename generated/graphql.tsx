@@ -42,8 +42,14 @@ export type MutationDeleteHouseArgs = {
 
 export type Query = {
   __typename?: 'Query';
-  property: Array<House>;
+  properties: Array<House>;
+  property: House;
   users: Array<User>;
+};
+
+
+export type QueryPropertyArgs = {
+  propertyId: Scalars['ID'];
 };
 
 export type User = {
@@ -56,19 +62,25 @@ export type PeopleQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type PeopleQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', name: string }> };
 
-export type HouseQueryQueryVariables = Exact<{ [key: string]: never; }>;
+export type HousesQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type HouseQueryQuery = { __typename?: 'Query', property: Array<{ __typename?: 'House', id?: string | null, description: string, price: number }> };
+export type HousesQueryQuery = { __typename?: 'Query', properties: Array<{ __typename?: 'House', id?: string | null, description: string, price: number }> };
+
+export type HouseQueryQueryVariables = Exact<{
+  propertyId: Scalars['ID'];
+}>;
+
+
+export type HouseQueryQuery = { __typename?: 'Query', property: { __typename?: 'House', id?: string | null, description: string, price: number } };
 
 export type AddHouseMutationMutationVariables = Exact<{
-  id?: InputMaybe<Scalars['ID']>;
   description: Scalars['String'];
   price: Scalars['Int'];
 }>;
 
 
-export type AddHouseMutationMutation = { __typename?: 'Mutation', addHouse?: { __typename?: 'House', id?: string | null, description: string, price: number } | null };
+export type AddHouseMutationMutation = { __typename?: 'Mutation', addHouse?: { __typename?: 'House', description: string, price: number } | null };
 
 
 export const PeopleDocument = gql`
@@ -105,9 +117,45 @@ export function usePeopleLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Peo
 export type PeopleQueryHookResult = ReturnType<typeof usePeopleQuery>;
 export type PeopleLazyQueryHookResult = ReturnType<typeof usePeopleLazyQuery>;
 export type PeopleQueryResult = Apollo.QueryResult<PeopleQuery, PeopleQueryVariables>;
+export const HousesQueryDocument = gql`
+    query HousesQuery {
+  properties {
+    id
+    description
+    price
+  }
+}
+    `;
+
+/**
+ * __useHousesQueryQuery__
+ *
+ * To run a query within a React component, call `useHousesQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useHousesQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useHousesQueryQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useHousesQueryQuery(baseOptions?: Apollo.QueryHookOptions<HousesQueryQuery, HousesQueryQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<HousesQueryQuery, HousesQueryQueryVariables>(HousesQueryDocument, options);
+      }
+export function useHousesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<HousesQueryQuery, HousesQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<HousesQueryQuery, HousesQueryQueryVariables>(HousesQueryDocument, options);
+        }
+export type HousesQueryQueryHookResult = ReturnType<typeof useHousesQueryQuery>;
+export type HousesQueryLazyQueryHookResult = ReturnType<typeof useHousesQueryLazyQuery>;
+export type HousesQueryQueryResult = Apollo.QueryResult<HousesQueryQuery, HousesQueryQueryVariables>;
 export const HouseQueryDocument = gql`
-    query HouseQuery {
-  property {
+    query HouseQuery($propertyId: ID!) {
+  property(propertyId: $propertyId) {
     id
     description
     price
@@ -127,10 +175,11 @@ export const HouseQueryDocument = gql`
  * @example
  * const { data, loading, error } = useHouseQueryQuery({
  *   variables: {
+ *      propertyId: // value for 'propertyId'
  *   },
  * });
  */
-export function useHouseQueryQuery(baseOptions?: Apollo.QueryHookOptions<HouseQueryQuery, HouseQueryQueryVariables>) {
+export function useHouseQueryQuery(baseOptions: Apollo.QueryHookOptions<HouseQueryQuery, HouseQueryQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<HouseQueryQuery, HouseQueryQueryVariables>(HouseQueryDocument, options);
       }
@@ -142,9 +191,8 @@ export type HouseQueryQueryHookResult = ReturnType<typeof useHouseQueryQuery>;
 export type HouseQueryLazyQueryHookResult = ReturnType<typeof useHouseQueryLazyQuery>;
 export type HouseQueryQueryResult = Apollo.QueryResult<HouseQueryQuery, HouseQueryQueryVariables>;
 export const AddHouseMutationDocument = gql`
-    mutation AddHouseMutation($id: ID, $description: String!, $price: Int!) {
-  addHouse(id: $id, description: $description, price: $price) {
-    id
+    mutation AddHouseMutation($description: String!, $price: Int!) {
+  addHouse(description: $description, price: $price) {
     description
     price
   }
@@ -165,7 +213,6 @@ export type AddHouseMutationMutationFn = Apollo.MutationFunction<AddHouseMutatio
  * @example
  * const [addHouseMutationMutation, { data, loading, error }] = useAddHouseMutationMutation({
  *   variables: {
- *      id: // value for 'id'
  *      description: // value for 'description'
  *      price: // value for 'price'
  *   },

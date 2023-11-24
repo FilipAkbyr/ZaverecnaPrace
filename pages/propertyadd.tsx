@@ -3,7 +3,7 @@ import { useAddHouseMutationMutation } from '../generated/graphql';
 import { Container, TextField, Button } from '@mui/material';
 import Navbar from '../components/navbar';
 import Head from 'next/head';
-import Link from 'next/link';
+
 
 
 const DynamicPropertyForm: React.FC = () => {
@@ -25,7 +25,6 @@ const DynamicPropertyForm: React.FC = () => {
 
     try {
       const newProperty = {
-        id: formData.propertyId, 
         description: formData.propertyName,
         price: parseInt(formData.propertyValue), 
         ...formData,
@@ -49,16 +48,6 @@ const DynamicPropertyForm: React.FC = () => {
       </Head>
       <h1 style={{ textAlign: 'center' }}>Dynamic Property Addition</h1>
       <form onSubmit={handleSubmit}>
-        <TextField
-          fullWidth
-          id="propertyId"
-          name="propertyId"
-          label="Property ID"
-          value={formData.propertyId}
-          onChange={handleInputChange}
-          required
-          margin="normal"
-        />
         <TextField
           fullWidth
           id="propertyName"
