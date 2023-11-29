@@ -5,16 +5,33 @@ import { ref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import Image from "next/image";
 import Navbar from "../../components/navbar";
-import { useHouseQueryQuery } from "../../generated/graphql";
+import { House, useHouseQueryLazyQuery, useHouseQueryQuery } from "../../generated/graphql";
 import { Router, useRouter } from "next/router";
+import { ParsedUrlQuery } from "querystring";
 
 const PropertyDetail = () => {
   const router = useRouter();
   // console.log(router.query.propertyId);
+  // const [query, setQuery] = useState<ParsedUrlQuery>();
+
+  const {id} = router.query;
+
+  const [getHouse, { loading, error, data }] = useHouseQueryLazyQuery({
+    variables: { propertyId: id?.toString() ?? "" },
+  });
+
+  useEffect(() => {
+    if (router.isReady) {
+      getHouse();
+      setPropertyData(data?.property as House);
+    }
+  }, [router, getHouse, data]);
+  
   const [imageList, setImageList] = useState<string[]>([]);
   const imageListRef = ref(storage, "images/");
-  const propertyData = useHouseQueryQuery({ variables: { propertyId: router.query.propertyId!.toString() } });
-  
+  // const propertyData = useHouseQueryQuery({ variables: { propertyId: id?.toString()} });
+  const [propertyData, setPropertyData] = useState<House | undefined>();
+
   const uploadImage = (image: File) => {
     if (image == null) return;
     const imageRef = ref(storage, `images/${image.name + v4()}`);
@@ -33,7 +50,7 @@ const PropertyDetail = () => {
         });
       });
     });
-  }, [imageListRef]);
+  }, []);
 
   return (
     <>
@@ -47,7 +64,7 @@ const PropertyDetail = () => {
             <TextField
               fullWidth
               variant="outlined"
-              value={propertyData.data?.property.description}
+              value={propertyData?.description}
               disabled={true}
             />
           </Grid>
@@ -55,7 +72,7 @@ const PropertyDetail = () => {
             <TextField
               fullWidth
               variant="outlined"
-              value={propertyData.data?.property.price}
+              value={propertyData?.price}
               disabled={true}
             />
           </Grid>
