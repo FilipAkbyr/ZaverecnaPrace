@@ -5,14 +5,11 @@ import { ref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import Image from "next/image";
 import Navbar from "../../components/navbar";
-import { House, useHouseQueryLazyQuery, useHouseQueryQuery } from "../../generated/graphql";
-import { Router, useRouter } from "next/router";
-import { ParsedUrlQuery } from "querystring";
+import { House, useHouseQueryLazyQuery } from "../../generated/graphql";
+import { useRouter } from "next/router";
 
 const PropertyDetail = () => {
   const router = useRouter();
-  // console.log(router.query.propertyId);
-  // const [query, setQuery] = useState<ParsedUrlQuery>();
 
   const {id} = router.query;
 
@@ -28,13 +25,15 @@ const PropertyDetail = () => {
   }, [router, getHouse, data]);
   
   const [imageList, setImageList] = useState<string[]>([]);
-  const imageListRef = ref(storage, "images/");
-  // const propertyData = useHouseQueryQuery({ variables: { propertyId: id?.toString()} });
   const [propertyData, setPropertyData] = useState<House | undefined>();
+  
+  const imageDir = `images/${id}/`;
+
+  const imageListRef = ref(storage, imageDir);
 
   const uploadImage = (image: File) => {
     if (image == null) return;
-    const imageRef = ref(storage, `images/${image.name + v4()}`);
+    const imageRef = ref(storage, imageDir + `${image.name + v4()}`);
     uploadBytes(imageRef, image).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((url) => {
         setImageList((prev) => [...prev, url]);
