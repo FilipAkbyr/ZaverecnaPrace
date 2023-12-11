@@ -2,7 +2,7 @@ import { createYoga, createSchema } from 'graphql-yoga'
 import { gql } from 'graphql-tag';
 import { DecodedIdToken } from 'firebase-admin/auth';
 import { verifyToken } from '../../server/verifyToken';
-import { House } from '../../generated/graphql';
+import { House, Roles, User } from '../../generated/graphql';
 import { firestore } from '../../server/firebase-admin-config';
 
 
@@ -12,13 +12,16 @@ type Context = {
 
 const typeDefs = gql`
   type Query {
-    users: [User!]!
+    user(userEmail: String!): User!
     property(propertyId: ID!): House!
     properties: [House!]!
   }
   
   type User {
-    name: String!
+    id: ID
+    username: String!
+    email: String!
+    role: Roles!
   }
 
   type House {
@@ -29,7 +32,12 @@ const typeDefs = gql`
 
   type Mutation {
       addHouse(id: ID, description: String!, price: Int!): House
-      deleteHouse(id: ID!): House
+      deleteHouse(propertyId: ID!): House
+  }
+
+  enum Roles {
+    User
+    Admin
   }
   
 `;
@@ -44,15 +52,22 @@ const resolvers = {
           const docsSnapshotPromises = docsRefs.map((doc) => doc.get());
           const docsSnapshots = await Promise.all(docsSnapshotPromises);
           const docs = docsSnapshots.map((doc) => ({...doc.data(), id: doc.id}));
-          console.log(docs);
           return docs;
         },
         property: async (_root: any, args: any) => {
-          console.log(args.propertyId);
           const houseRef = db.doc(`/properties/${args.propertyId}`) as FirebaseFirestore.DocumentReference<House>;
           const docSnapshot = await houseRef.get();
           const doc = docSnapshot.data();
           return {...doc, id: docSnapshot.id};
+        },
+        user: async (_root: any, _args: any, context: Context) => {
+          const userRef = db.collection('users') as FirebaseFirestore.CollectionReference<User>;
+          const docsRefs = await userRef.listDocuments();
+          const docsSnapshotPromises = docsRefs.map((doc) => doc.get());
+          const docsSnapshots = await Promise.all(docsSnapshotPromises);
+          const docs = docsSnapshots.map((doc) => ({...doc.data(), id: doc.id}));
+          const user = docs.find((doc) => doc.email === _args.userEmail);
+          return user;
         },
       },
       Mutation: {
@@ -62,11 +77,10 @@ const resolvers = {
           await projectRef.set(project);
           return project;
         },
-        deleteHouse: async (_: any, {id}: {id: string}, __: any) => {
-          const projectRef = db.collection('properties').doc(id);
-          const project = await projectRef.get();
-          await projectRef.delete();
-          return project.data();
+        deleteHouse: async (_root: any, args: any) => {
+          const docRef = db.doc(`/properties/${args.propertyId}`);
+          await docRef.delete();
+          return;
         }
       },
   };
@@ -78,7 +92,6 @@ const resolvers = {
 
   export default createYoga({
     schema,
-    // Needed to be defined explicitly because our endpoint lives at a different path other than /graphql
     graphqlEndpoint: '/api/graphql',
     context: async (context) => {
       const auth = context.request.headers.get('authorization');

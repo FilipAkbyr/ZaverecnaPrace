@@ -1,20 +1,71 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import Navbar from "../components/navbar";
-import { Typography } from "@mui/material";
-import { useAuthContext } from "../components/auth-context-provider";
+import { Box, Typography, Button } from "@mui/material";
 
 
 export const Home: NextPage = () => 
 {
-    const { user } = useAuthContext();
     return (
         <>
         <Head>
             <title>Notable reality</title>
         </Head>
         <Navbar></Navbar>
-        <Typography variant="h1">user: {user?.email}</Typography>
+        <Box sx={{
+          position: 'static',
+          layout: 'fill',
+          objectFit: 'cover',
+          backgroundImage: 'url(/background.jpg)',
+          height: '100vh',
+          backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        marginTop: '-64px',
+        }}> 
+        </Box>
+
+        <Typography
+          variant="h4"
+          component="div"
+          sx={{
+            position: 'absolute',
+            left: '8%', 
+            top: '40%',
+            transform: 'translateY(-50%)',
+            color: 'white',
+          }}
+        >
+            Live like in the palm of your hand,
+            <br />
+            cheap and close    
+        </Typography>
+        <Typography variant="h5"
+        component="div"
+        sx={{
+          position: 'absolute',
+          left: '8%',
+          top: '54%',
+          transform: 'translateY(-50%)',
+          color: 'white',
+        }}
+        >
+        Check out our offers below
+        </Typography>
+        <Button
+        variant="contained"
+        href="adverts"
+        color="primary"
+        sx={{
+          position: 'absolute',
+          left: '8%', 
+          top: '55%', 
+          width: '200px',
+          borderRadius: '12px',
+          marginTop: '10px',
+        }}
+      >
+        Offers
+      </Button>
         
         </>
     );

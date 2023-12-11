@@ -56,7 +56,7 @@ const Login: NextPage = () => {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Registrace
+              Register
             </Typography>
             <Box
               component="form"
@@ -69,7 +69,7 @@ const Login: NextPage = () => {
                 required
                 fullWidth
                 id="email"
-                label="Zadejte email adresu"
+                label="Email"
                 name="email"
                 autoComplete="email"
                 autoFocus
@@ -84,7 +84,7 @@ const Login: NextPage = () => {
                 required
                 fullWidth
                 name="password"
-                label="Zadejte heslo"
+                label="Password"
                 type="password"
                 id="password"
                 autoComplete="current-password"
@@ -100,12 +100,17 @@ const Login: NextPage = () => {
                 variant="contained"
                 sx={{ mt: 3, mb: 2, backgroundColor: 'black', color: 'white', ...buttonHover }}
               >
-                Registrovat se
+                Register
               </Button>
               <Grid container>
                 <Grid item>
                   <Link component={NextLink} href="/login" variant="body2" sx={{ color: 'black', textDecorationColor: 'black' }}>
-                    Už máte účet?
+                    Already have an account?
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <Link component={NextLink} href="/" variant="body2" sx={{ color: 'black', textDecorationColor: 'black', marginLeft: "150px" }}>
+                    Home Page
                   </Link>
                 </Grid>
               </Grid>

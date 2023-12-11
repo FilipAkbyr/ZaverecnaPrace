@@ -37,14 +37,14 @@ export type MutationAddHouseArgs = {
 
 
 export type MutationDeleteHouseArgs = {
-  id: Scalars['ID'];
+  propertyId: Scalars['ID'];
 };
 
 export type Query = {
   __typename?: 'Query';
   properties: Array<House>;
   property: House;
-  users: Array<User>;
+  user: User;
 };
 
 
@@ -52,15 +52,23 @@ export type QueryPropertyArgs = {
   propertyId: Scalars['ID'];
 };
 
-export type User = {
-  __typename?: 'User';
-  name: Scalars['String'];
+
+export type QueryUserArgs = {
+  userEmail: Scalars['String'];
 };
 
-export type PeopleQueryVariables = Exact<{ [key: string]: never; }>;
+export enum Roles {
+  Admin = 'Admin',
+  User = 'User'
+}
 
-
-export type PeopleQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', name: string }> };
+export type User = {
+  __typename?: 'User';
+  email: Scalars['String'];
+  id?: Maybe<Scalars['ID']>;
+  role: Roles;
+  username: Scalars['String'];
+};
 
 export type HousesQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -74,6 +82,13 @@ export type HouseQueryQueryVariables = Exact<{
 
 export type HouseQueryQuery = { __typename?: 'Query', property: { __typename?: 'House', id?: string | null, description: string, price: number } };
 
+export type UserDataQueryVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type UserDataQuery = { __typename?: 'Query', user: { __typename?: 'User', id?: string | null, email: string, role: Roles, username: string } };
+
 export type AddHouseMutationMutationVariables = Exact<{
   description: Scalars['String'];
   price: Scalars['Int'];
@@ -82,41 +97,14 @@ export type AddHouseMutationMutationVariables = Exact<{
 
 export type AddHouseMutationMutation = { __typename?: 'Mutation', addHouse?: { __typename?: 'House', description: string, price: number } | null };
 
+export type DeleteHouseMutationMutationVariables = Exact<{
+  propertyId: Scalars['ID'];
+}>;
 
-export const PeopleDocument = gql`
-    query people {
-  users {
-    name
-  }
-}
-    `;
 
-/**
- * __usePeopleQuery__
- *
- * To run a query within a React component, call `usePeopleQuery` and pass it any options that fit your needs.
- * When your component renders, `usePeopleQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = usePeopleQuery({
- *   variables: {
- *   },
- * });
- */
-export function usePeopleQuery(baseOptions?: Apollo.QueryHookOptions<PeopleQuery, PeopleQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<PeopleQuery, PeopleQueryVariables>(PeopleDocument, options);
-      }
-export function usePeopleLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PeopleQuery, PeopleQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<PeopleQuery, PeopleQueryVariables>(PeopleDocument, options);
-        }
-export type PeopleQueryHookResult = ReturnType<typeof usePeopleQuery>;
-export type PeopleLazyQueryHookResult = ReturnType<typeof usePeopleLazyQuery>;
-export type PeopleQueryResult = Apollo.QueryResult<PeopleQuery, PeopleQueryVariables>;
+export type DeleteHouseMutationMutation = { __typename?: 'Mutation', deleteHouse?: { __typename?: 'House', id?: string | null } | null };
+
+
 export const HousesQueryDocument = gql`
     query HousesQuery {
   properties {
@@ -190,6 +178,44 @@ export function useHouseQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type HouseQueryQueryHookResult = ReturnType<typeof useHouseQueryQuery>;
 export type HouseQueryLazyQueryHookResult = ReturnType<typeof useHouseQueryLazyQuery>;
 export type HouseQueryQueryResult = Apollo.QueryResult<HouseQueryQuery, HouseQueryQueryVariables>;
+export const UserDataDocument = gql`
+    query UserData($email: String!) {
+  user(userEmail: $email) {
+    id
+    email
+    role
+    username
+  }
+}
+    `;
+
+/**
+ * __useUserDataQuery__
+ *
+ * To run a query within a React component, call `useUserDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserDataQuery({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useUserDataQuery(baseOptions: Apollo.QueryHookOptions<UserDataQuery, UserDataQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserDataQuery, UserDataQueryVariables>(UserDataDocument, options);
+      }
+export function useUserDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserDataQuery, UserDataQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserDataQuery, UserDataQueryVariables>(UserDataDocument, options);
+        }
+export type UserDataQueryHookResult = ReturnType<typeof useUserDataQuery>;
+export type UserDataLazyQueryHookResult = ReturnType<typeof useUserDataLazyQuery>;
+export type UserDataQueryResult = Apollo.QueryResult<UserDataQuery, UserDataQueryVariables>;
 export const AddHouseMutationDocument = gql`
     mutation AddHouseMutation($description: String!, $price: Int!) {
   addHouse(description: $description, price: $price) {
@@ -225,3 +251,36 @@ export function useAddHouseMutationMutation(baseOptions?: Apollo.MutationHookOpt
 export type AddHouseMutationMutationHookResult = ReturnType<typeof useAddHouseMutationMutation>;
 export type AddHouseMutationMutationResult = Apollo.MutationResult<AddHouseMutationMutation>;
 export type AddHouseMutationMutationOptions = Apollo.BaseMutationOptions<AddHouseMutationMutation, AddHouseMutationMutationVariables>;
+export const DeleteHouseMutationDocument = gql`
+    mutation DeleteHouseMutation($propertyId: ID!) {
+  deleteHouse(propertyId: $propertyId) {
+    id
+  }
+}
+    `;
+export type DeleteHouseMutationMutationFn = Apollo.MutationFunction<DeleteHouseMutationMutation, DeleteHouseMutationMutationVariables>;
+
+/**
+ * __useDeleteHouseMutationMutation__
+ *
+ * To run a mutation, you first call `useDeleteHouseMutationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteHouseMutationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteHouseMutationMutation, { data, loading, error }] = useDeleteHouseMutationMutation({
+ *   variables: {
+ *      propertyId: // value for 'propertyId'
+ *   },
+ * });
+ */
+export function useDeleteHouseMutationMutation(baseOptions?: Apollo.MutationHookOptions<DeleteHouseMutationMutation, DeleteHouseMutationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteHouseMutationMutation, DeleteHouseMutationMutationVariables>(DeleteHouseMutationDocument, options);
+      }
+export type DeleteHouseMutationMutationHookResult = ReturnType<typeof useDeleteHouseMutationMutation>;
+export type DeleteHouseMutationMutationResult = Apollo.MutationResult<DeleteHouseMutationMutation>;
+export type DeleteHouseMutationMutationOptions = Apollo.BaseMutationOptions<DeleteHouseMutationMutation, DeleteHouseMutationMutationVariables>;

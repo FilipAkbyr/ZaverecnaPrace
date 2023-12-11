@@ -1,8 +1,3 @@
-query people {
-  users {
-    name
-  }
-}
 query HousesQuery{
   properties {
     id
@@ -19,9 +14,24 @@ query HouseQuery($propertyId: ID!) {
   }
 }
 
+query UserData($email: String!) {
+  user(userEmail: $email) {
+    id
+    email
+    role
+    username
+  }
+}
+
 mutation AddHouseMutation($description: String!, $price: Int!) {
   addHouse( description: $description, price: $price) {
     description
     price
+  }
+}
+
+mutation DeleteHouseMutation($propertyId: ID!) {
+  deleteHouse(propertyId: $propertyId) {
+    id
   }
 }

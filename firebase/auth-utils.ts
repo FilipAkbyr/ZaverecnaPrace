@@ -1,4 +1,5 @@
 import {
+  User,
     createUserWithEmailAndPassword,
     getAuth,
     signInWithEmailAndPassword,
@@ -7,6 +8,15 @@ import {
   
   
   const auth = getAuth(firebase_app);
+  enum Role {
+    User,
+    Admin
+  }
+  type MyUser = (User | null | undefined) & { role?: Role, username?: string };
+  
+  // const [getUser, { error, data }] = useUserDataLazyQuery({
+  //   variables: { email: user?.email ?? "" },
+  // });
   
   export const authUtils = {
     login: async (email: string, password: string) => {
@@ -39,6 +49,9 @@ import {
       await createUserWithEmailAndPassword(auth, email, password);
     },
     getCurrentUser: () => auth.currentUser,
+    getIdkUser: () => {
+      return {...auth.currentUser, role: Role.Admin, username: "Pilif"} as MyUser;
+    }
   };
 
   

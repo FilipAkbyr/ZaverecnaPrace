@@ -27,8 +27,6 @@ const Login: NextPage = () => {
   const handleForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const loginResult = await authUtils.login(email, password);
-    localStorage.setItem('loginState', JSON.stringify(loginResult));
-    // localStorage.setItem('currentUserEmail', JSON.stringify(email));
     if(loginResult == true)
     {
       return router.push('/');
@@ -66,7 +64,7 @@ const Login: NextPage = () => {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Přihlášení
+              Login
             </Typography>
             <Box
               component="form"
@@ -79,7 +77,7 @@ const Login: NextPage = () => {
                 required
                 fullWidth
                 id="email"
-                label="Zadejte email adresu"
+                label="Email"
                 name="email"
                 autoComplete="email"
                 autoFocus
@@ -94,7 +92,7 @@ const Login: NextPage = () => {
                 required
                 fullWidth
                 name="password"
-                label="Zadejte heslo"
+                label="Password"
                 type="password"
                 id="password"
                 autoComplete="current-password"
@@ -110,12 +108,17 @@ const Login: NextPage = () => {
                 variant="contained"
                 sx={{ mt: 3, mb: 2, backgroundColor: 'black', color: 'white', ...buttonHover }}
               >
-                Přihlásit se
+                Login
               </Button>
               <Grid container>
                 <Grid item>
                   <Link component={NextLink} href="/register" variant="body2" sx={{ color: 'black', textDecorationColor: 'black' }}>
-                    Nemáte ještě už účet?
+                    Dont have an account? 
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <Link component={NextLink} href="/" variant="body2" sx={{ color: 'black', textDecorationColor: 'black', marginLeft: "150px" }}>
+                    Home Page
                   </Link>
                 </Grid>
               </Grid>
