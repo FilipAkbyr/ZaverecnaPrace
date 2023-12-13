@@ -16,6 +16,7 @@ import NextLink from 'next/link';
 import React, { FormEvent, useState } from 'react';
 import {authUtils} from "../firebase/auth-utils";
 import router from 'next/router';
+import { ToastContainer } from 'react-toastify';
 
 let loginResult: Boolean;
 loginResult = false;
@@ -41,6 +42,8 @@ const Login: NextPage = () => {
   };
 
   return (
+    <>
+    <ToastContainer containerId={"loginToastId"}/>
       <Box
         width="100vw"
         height="100vh"
@@ -126,6 +129,7 @@ const Login: NextPage = () => {
           </Box>
         </Container>
       </Box>
+    </>
   );
 };
 

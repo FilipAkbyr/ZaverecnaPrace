@@ -12,7 +12,7 @@ export const HeaderProfileButton = () => {
     const auth = useAuthContext();
     console.log(auth); 
     const [anchorEl, setAnchorEl] = useState<null | HTMLButtonElement>(null);
-    const [username, setUsername] = useState(user?.username ?? "");
+    // const [username, setUsername] = useState(user?.username ?? "");
     const handleClickOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -33,9 +33,6 @@ export const HeaderProfileButton = () => {
         },
     };
 
-    // const handleLogout = () => {
-    //     ();
-    // };
     
     return (
         <>
@@ -45,7 +42,7 @@ export const HeaderProfileButton = () => {
             <Box>
                 <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose} sx={{ position: 'absolute' }}>
                     <MenuItem sx={{ fontWeight: 'bold', borderBottom: '2px solid ' + "white", padding: '6px 16px', pointerEvents: 'none' }}>
-                        <Typography sx={{ fontWeight: '550', fontSize: '17px' }}>{user?.username}</Typography>
+                        <Typography sx={{ fontWeight: '550', fontSize: '17px' }}>{currentUserEmail}</Typography>
                     </MenuItem>
                     <MenuItem sx={{ ...hover }}>
                         <Link style={{ color: "white", textDecoration: 'none' }} href={'#'}>Profile</Link>

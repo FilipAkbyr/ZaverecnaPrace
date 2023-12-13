@@ -5,6 +5,7 @@ import {
     signInWithEmailAndPassword,
   } from 'firebase/auth';
   import { firebase_app } from './config';
+import { toast } from 'react-toastify';
   
   
   const auth = getAuth(firebase_app);
@@ -28,16 +29,16 @@ import {
     } catch (error : any) {
         switch (error.code) {
             case "auth/invalid-email":
-                alert("Špatně zadaný email.");
+                toast.error("Email incorrect. Please try again.", {containerId: "loginToastId", position: "top-right", autoClose: 2000});       
                 break;
             case "auth/wrong-password":
-                alert("Nesprávné heslo.");
+                toast.error("Password incorrect. Please try again.", {containerId: "loginToastId", position: "top-right", autoClose: 2000});
                 break;
             case "auth/network-request-failed":
-                alert("Chyba v síti. Prosím zkuste to znovu později.");
+                toast.error("Network error. Please try again.", {containerId: "loginToastId", position: "top-right", autoClose: 2000});
                 break;
             default:
-            alert(error.message);
+            toast.error("Something went wrong. Please try again.", {containerId: "loginToastId", position: "top-right", autoClose: 2000});
         }
         return false;
     }

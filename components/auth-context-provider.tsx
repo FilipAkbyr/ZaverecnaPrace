@@ -28,7 +28,7 @@ export const AuthContextProvider: FC<PropsWithChildren> = ({ children }) => {
   const [getUser, { error, data }] = useUserDataLazyQuery({
     variables: { email: user?.email ?? "" },
     onCompleted: (userData) => {
-      console.log(userData); // Check if the data is correctly fetched
+      console.log(userData);
       setUser({...user, ...userData} as MyUser);
     },
   });

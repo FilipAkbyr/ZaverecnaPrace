@@ -7,6 +7,7 @@ import createEmotionCache from '../utility/createEmotionCache';
 import lightThemeOptions from '../styles/theme/lightThemeOptions';
 import { ApolloProvider } from '@apollo/client';
 import { getApolloClient } from '../utility/apollo-client';
+import'react-toastify/dist/ReactToastify.css';
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
 }

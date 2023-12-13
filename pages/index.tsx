@@ -19,12 +19,13 @@ export const Home: NextPage = () =>
           backgroundImage: 'url(/background.jpg)',
           height: '100vh',
           backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        marginTop: '-64px',
+          backgroundPosition: 'center',
+          marginTop: '-64px',
         }}> 
         </Box>
 
-        <Typography
+<Box>
+<Typography
           variant="h4"
           component="div"
           sx={{
@@ -66,6 +67,8 @@ export const Home: NextPage = () =>
       >
         Offers
       </Button>
+</Box>
+        
         
         </>
     );

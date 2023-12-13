@@ -2,7 +2,8 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { useAddHouseMutationMutation } from '../generated/graphql';
 import { Container, TextField, Button } from '@mui/material';
 import Navbar from '../components/navbar';
-import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { ToastContainer, toast } from 'react-toastify';
 
 
 
@@ -13,6 +14,7 @@ const DynamicPropertyForm: React.FC = () => {
     propertyValue: '',
   });
 
+  const router = useRouter();
   const [addProperty] = useAddHouseMutationMutation();
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -34,7 +36,8 @@ const DynamicPropertyForm: React.FC = () => {
         variables: newProperty,
       });
 
-      alert('Property added successfully');
+      router.push('/adverts');
+      toast.success('Property added successfully', {containerId: "advertsToastId", position: "top-right", autoClose: 2000});
     } catch (error) {
       alert('Error adding property');
       console.error('Mutation error:', error);
@@ -42,10 +45,10 @@ const DynamicPropertyForm: React.FC = () => {
   };
 
   return (
+    <>
+    <Navbar></Navbar>
     <Container maxWidth="sm">
-      <Head>
-        <Navbar></Navbar>
-      </Head>
+    
       <h1 style={{ textAlign: 'center' }}>Dynamic Property Addition</h1>
       <form onSubmit={handleSubmit}>
         <TextField
@@ -78,6 +81,7 @@ const DynamicPropertyForm: React.FC = () => {
         </Button>
       </form>
     </Container>
+    </>
   );
 };
 
