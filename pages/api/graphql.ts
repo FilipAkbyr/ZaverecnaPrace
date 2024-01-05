@@ -28,10 +28,11 @@ const typeDefs = gql`
     id: ID
     description: String!
     price: Int!
+    city: String!
   }
 
   type Mutation {
-      addHouse(id: ID, description: String!, price: Int!): House
+      addHouse(id: ID, description: String!, price: Int!, city: String!): House
       deleteHouse(propertyId: ID!): House
   }
 
@@ -71,9 +72,9 @@ const resolvers = {
         },
       },
       Mutation: {
-        addHouse: async (_: any, { description, price}: { description: string, price: number}, __: any) => {
+        addHouse: async (_: any, { description, price, city}: { description: string, price: number, city: string}, __: any) => {
           const projectRef = db.collection('properties').doc();
-          const project = {description, price }; 
+          const project = {description, price, city }; 
           await projectRef.set(project);
           return project;
         },

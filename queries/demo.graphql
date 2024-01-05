@@ -3,6 +3,7 @@ query HousesQuery{
     id
     description
     price
+    city
   }
 }
 
@@ -11,6 +12,7 @@ query HouseQuery($propertyId: ID!) {
     id
     description
     price
+    city
   }
 }
 
@@ -23,10 +25,11 @@ query UserData($email: String!) {
   }
 }
 
-mutation AddHouseMutation($description: String!, $price: Int!) {
-  addHouse( description: $description, price: $price) {
+mutation AddHouseMutation($description: String!, $price: Int!, $city: String!) {
+  addHouse( description: $description, price: $price, city: $city) {
     description
     price
+    city
   }
 }
 

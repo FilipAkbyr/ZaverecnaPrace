@@ -8,10 +8,11 @@ import { ToastContainer, toast } from 'react-toastify';
 
 
 const DynamicPropertyForm: React.FC = () => {
-  const [formData, setFormData] = useState<{ propertyId: string, propertyName: string; propertyValue: string }>({
+  const [formData, setFormData] = useState<{ propertyId: string, propertyName: string; propertyValue: string, propertyCity: string }>({
     propertyId: '',
     propertyName: '',
     propertyValue: '',
+    propertyCity: '',
   });
 
   const router = useRouter();
@@ -29,6 +30,7 @@ const DynamicPropertyForm: React.FC = () => {
       const newProperty = {
         description: formData.propertyName,
         price: parseInt(formData.propertyValue), 
+        city: formData.propertyCity,
         ...formData,
       };
 
@@ -67,6 +69,16 @@ const DynamicPropertyForm: React.FC = () => {
           name="propertyValue"
           label="Property Value"
           value={formData.propertyValue}
+          onChange={handleInputChange}
+          required
+          margin="normal"
+        />
+        <TextField
+          fullWidth
+          id="propertyCity"
+          name="propertyCity"
+          label="property City"
+          value={formData.propertyCity}
           onChange={handleInputChange}
           required
           margin="normal"

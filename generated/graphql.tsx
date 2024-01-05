@@ -17,6 +17,7 @@ export type Scalars = {
 
 export type House = {
   __typename?: 'House';
+  city: Scalars['String'];
   description: Scalars['String'];
   id?: Maybe<Scalars['ID']>;
   price: Scalars['Int'];
@@ -30,6 +31,7 @@ export type Mutation = {
 
 
 export type MutationAddHouseArgs = {
+  city: Scalars['String'];
   description: Scalars['String'];
   id?: InputMaybe<Scalars['ID']>;
   price: Scalars['Int'];
@@ -73,14 +75,14 @@ export type User = {
 export type HousesQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type HousesQueryQuery = { __typename?: 'Query', properties: Array<{ __typename?: 'House', id?: string | null, description: string, price: number }> };
+export type HousesQueryQuery = { __typename?: 'Query', properties: Array<{ __typename?: 'House', id?: string | null, description: string, price: number, city: string }> };
 
 export type HouseQueryQueryVariables = Exact<{
   propertyId: Scalars['ID'];
 }>;
 
 
-export type HouseQueryQuery = { __typename?: 'Query', property: { __typename?: 'House', id?: string | null, description: string, price: number } };
+export type HouseQueryQuery = { __typename?: 'Query', property: { __typename?: 'House', id?: string | null, description: string, price: number, city: string } };
 
 export type UserDataQueryVariables = Exact<{
   email: Scalars['String'];
@@ -92,10 +94,11 @@ export type UserDataQuery = { __typename?: 'Query', user: { __typename?: 'User',
 export type AddHouseMutationMutationVariables = Exact<{
   description: Scalars['String'];
   price: Scalars['Int'];
+  city: Scalars['String'];
 }>;
 
 
-export type AddHouseMutationMutation = { __typename?: 'Mutation', addHouse?: { __typename?: 'House', description: string, price: number } | null };
+export type AddHouseMutationMutation = { __typename?: 'Mutation', addHouse?: { __typename?: 'House', description: string, price: number, city: string } | null };
 
 export type DeleteHouseMutationMutationVariables = Exact<{
   propertyId: Scalars['ID'];
@@ -111,6 +114,7 @@ export const HousesQueryDocument = gql`
     id
     description
     price
+    city
   }
 }
     `;
@@ -147,6 +151,7 @@ export const HouseQueryDocument = gql`
     id
     description
     price
+    city
   }
 }
     `;
@@ -217,10 +222,11 @@ export type UserDataQueryHookResult = ReturnType<typeof useUserDataQuery>;
 export type UserDataLazyQueryHookResult = ReturnType<typeof useUserDataLazyQuery>;
 export type UserDataQueryResult = Apollo.QueryResult<UserDataQuery, UserDataQueryVariables>;
 export const AddHouseMutationDocument = gql`
-    mutation AddHouseMutation($description: String!, $price: Int!) {
-  addHouse(description: $description, price: $price) {
+    mutation AddHouseMutation($description: String!, $price: Int!, $city: String!) {
+  addHouse(description: $description, price: $price, city: $city) {
     description
     price
+    city
   }
 }
     `;
@@ -241,6 +247,7 @@ export type AddHouseMutationMutationFn = Apollo.MutationFunction<AddHouseMutatio
  *   variables: {
  *      description: // value for 'description'
  *      price: // value for 'price'
+ *      city: // value for 'city'
  *   },
  * });
  */

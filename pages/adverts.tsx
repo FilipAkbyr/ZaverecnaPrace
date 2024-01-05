@@ -8,8 +8,11 @@ import { BsFillPlusSquareFill } from 'react-icons/bs';
 import DeleteIcon from '@mui/icons-material/DeleteForeverTwoTone';
 import { useDeleteHouseMutationMutation } from '../generated/graphql';
 import { ToastContainer, toast } from 'react-toastify';
-import { useAuthContext } from '../components/auth-context-provider';
 import { authUtils } from '../firebase/auth-utils';
+import { getDownloadURL, listAll, ref } from 'firebase/storage';
+import { storage } from '../firebase/config';
+import { Maybe } from 'graphql-yoga';
+import Image from "next/image";
 
 
 const PropertyList = () => {
@@ -19,7 +22,33 @@ const PropertyList = () => {
   const user = authUtils.getCurrentUser();
   const userData = useUserDataQuery({variables: {email: user?.email ?? ""}}).data?.user;
   const [isAdmin, setIsAdmin] = useState(false);
+
+  const [imageList, setImageList] = useState<Map<string, string>>(new Map<string, string>());
+  
+  useEffect(() => {
+    if (properties.length === 0) {
+      return; // No need to fetch images if there are no properties
+    }
+
+    const fetchImages = async () => {
+      for (const property of properties) {
+        const imageDir = `images/${property.id}`;
+        const imageListRef = ref(storage, imageDir);
+        const res = await listAll(imageListRef);
+
+        if (res.items.length > 0) {
+          const firstItem = res.items[0];
+          const url = await getDownloadURL(firstItem);
+          setImageList((prev) => new Map(prev.set(property.id!, url)));
+        }
+      }
+    };
+
+    fetchImages();
+  }, [properties]);
+
   console.log(user);
+  console.log(imageList);
 console.log(userData);
   const handleDeleteClick = async (propertyId: string | null | undefined) => {
     if (!propertyId) return;
@@ -84,6 +113,22 @@ console.log(userData);
                           {property.description}
                         </Typography>
                       </Link>
+                    </Container>
+                    {imageList.has(property.id!) ?
+                      <Container>
+                        <Image
+                          style={{ borderRadius: "10px" }}
+                          width={260}
+                          height={190}
+                          src={imageList.get(property.id!)!}
+                          alt={`property-${property.id}`}
+                        />
+                      </Container> : null
+                    }
+                    <Container>
+                      <Typography variant="body1" color="text.secondary">
+                        City: {property.city}
+                      </Typography>
                     </Container>
                     <Container>
                       <Typography variant="body1" color="text.secondary">

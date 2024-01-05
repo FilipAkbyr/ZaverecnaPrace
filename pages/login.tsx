@@ -36,8 +36,8 @@ const Login: NextPage = () => {
 
   const buttonHover = {
     "&:hover": {
-      backgroundColor: 'blue',
-      color: 'black'
+      backgroundColor: 'black',
+      color: 'white'
     },
   };
 
@@ -63,7 +63,7 @@ const Login: NextPage = () => {
               alignItems: 'center',
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'blue' }}>
+            <Avatar sx={{ m: 1, bgcolor: "#3562a6" }}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
@@ -109,7 +109,7 @@ const Login: NextPage = () => {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2, backgroundColor: 'black', color: 'white', ...buttonHover }}
+                sx={{ mt: 3, mb: 2, backgroundColor: "#3562a6", color: 'white', ...buttonHover }}
               >
                 Login
               </Button>

@@ -4,15 +4,15 @@ import Link from "next/link";
 import Button from "@mui/material/Button";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { authUtils } from "../firebase/auth-utils";
-import { useRouter } from "next/router";
 import { useAuthContext } from "./auth-context-provider";
+import { useUserDataQuery } from "../generated/graphql";
 
 export const HeaderProfileButton = () => {
     const { loading, user } = useAuthContext();
     const auth = useAuthContext();
     console.log(auth); 
     const [anchorEl, setAnchorEl] = useState<null | HTMLButtonElement>(null);
-    // const [username, setUsername] = useState(user?.username ?? "");
+    const [username, setUsername] = useState(user?.username ?? "");
     const handleClickOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -20,7 +20,8 @@ export const HeaderProfileButton = () => {
         setAnchorEl(null);
     };
     // const router = useRouter();
-    const currentUserEmail = (user?.email ?? "");
+    const {data, refetch} = useUserDataQuery({variables: {email: user?.email ?? ""}});
+    
     
     const hover = {
         "&:hover": {
@@ -42,7 +43,7 @@ export const HeaderProfileButton = () => {
             <Box>
                 <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose} sx={{ position: 'absolute' }}>
                     <MenuItem sx={{ fontWeight: 'bold', borderBottom: '2px solid ' + "white", padding: '6px 16px', pointerEvents: 'none' }}>
-                        <Typography sx={{ fontWeight: '550', fontSize: '17px' }}>{currentUserEmail}</Typography>
+                        <Typography sx={{ fontWeight: '550', fontSize: '17px' }}>{data?.user.email}</Typography>
                     </MenuItem>
                     <MenuItem sx={{ ...hover }}>
                         <Link style={{ color: "white", textDecoration: 'none' }} href={'#'}>Profile</Link>

@@ -5,11 +5,16 @@ import { ref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import Image from "next/image";
 import Navbar from "../../components/navbar";
-import { House, useHouseQueryLazyQuery } from "../../generated/graphql";
-import { useRouter } from "next/router";
+import { House, useHouseQueryLazyQuery, useUserDataQuery } from "../../generated/graphql";
+import router, { useRouter } from "next/router";
+import { authUtils } from "../../firebase/auth-utils";
+
 
 const PropertyDetail = () => {
   const router = useRouter();
+  const [isAdmin, setIsAdmin] = useState(false);
+  const user = authUtils.getCurrentUser();
+  const userData = useUserDataQuery({variables: {email: user?.email ?? ""}}).data?.user;
 
   const {id} = router.query;
 
@@ -21,8 +26,9 @@ const PropertyDetail = () => {
     if (router.isReady) {
       getHouse();
       setPropertyData(data?.property as House);
+      setIsAdmin(userData?.role === 'Admin');
     }
-  }, [router, getHouse, data]);
+  }, [router, getHouse, data, userData]);
   
   const [imageList, setImageList] = useState<string[]>([]);
   const [propertyData, setPropertyData] = useState<House | undefined>();
@@ -76,27 +82,35 @@ const PropertyDetail = () => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Button
-              variant="contained"
-              component="label"
-            >
-              Upload File
-              <input
-                type="file"
-                onChange={(e) => {
-                  if (e.target.files) {
-                    uploadImage(e.target.files[0]);
-                  }
-                }}
-                hidden
-              />
-            </Button>
+            <TextField
+              fullWidth
+              variant="outlined"
+              value={propertyData?.city}
+              disabled={true}
+            />
           </Grid>
+          {isAdmin && (
+            <Grid item xs={12}>
+              <Button variant="contained" component="label">
+                Upload File
+                <input
+                  type="file"
+                  onChange={(e) => {
+                    if (e.target.files) {
+                      uploadImage(e.target.files[0]);
+                    }
+                  }}
+                  hidden
+                />
+              </Button>
+            </Grid>
+          )}
           {imageList.map((url, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
               <Image
-                width={300}
-                height={200}
+                style={{ borderRadius: "10px" }}
+                width={260}
+                height={190}
                 src={url}
                 alt={`property-${index}`}
               />
@@ -105,7 +119,6 @@ const PropertyDetail = () => {
         </Grid>
       </Container>
     </>
-
   );
 };
 
