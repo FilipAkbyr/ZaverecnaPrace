@@ -31,7 +31,7 @@ const AboutPage: NextPage = () => {
           <EmailIcon /> info@notable-reality.cz
         </Typography>
         <Link href="/" passHref>
-          <Button variant="contained" color="primary">
+          <Button sx={{background: "#3562a6"}}variant="contained" color="primary">
             Go Back Home
           </Button>
         </Link>

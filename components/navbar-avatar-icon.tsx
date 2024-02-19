@@ -19,7 +19,6 @@ export const HeaderProfileButton = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
-    // const router = useRouter();
     const {data, refetch} = useUserDataQuery({variables: {email: user?.email ?? ""}});
     
     
@@ -29,7 +28,7 @@ export const HeaderProfileButton = () => {
             transition: 'background-color 0.5s ease'
         },
         '&:not(:hover)': {
-            backgroundColor: "black",
+            backgroundColor: "#3562a6",
             transition: 'background-color 0.5s ease'
         },
     };
@@ -43,7 +42,7 @@ export const HeaderProfileButton = () => {
             <Box>
                 <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose} sx={{ position: 'absolute' }}>
                     <MenuItem sx={{ fontWeight: 'bold', borderBottom: '2px solid ' + "white", padding: '6px 16px', pointerEvents: 'none' }}>
-                        <Typography sx={{ fontWeight: '550', fontSize: '17px' }}>{data?.user.email}</Typography>
+                        <Typography sx={{ fontWeight: '550', fontSize: '17px' }}>{user?.email}</Typography>
                     </MenuItem>
                     <MenuItem sx={{ ...hover }}>
                         <Link style={{ color: "white", textDecoration: 'none' }} href={'#'}>Profile</Link>

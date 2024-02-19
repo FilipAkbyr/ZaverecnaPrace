@@ -36,7 +36,7 @@ export const Home: NextPage = () =>
             color: 'white',
           }}
         >
-            Live like in the palm of your hand,
+            Live like in the palm of your hand
             <br />
             cheap and close    
         </Typography>
@@ -63,6 +63,7 @@ export const Home: NextPage = () =>
           width: '200px',
           borderRadius: '12px',
           marginTop: '10px',
+          background: "#3562a6"
         }}
       >
         Offers
