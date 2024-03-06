@@ -5,6 +5,7 @@ import { NextPage } from 'next';
 import Navbar from '../components/navbar';
 import CallIcon from '@mui/icons-material/Call';
 import EmailIcon from '@mui/icons-material/Email';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 const AboutPage: NextPage = () => {
   return (
@@ -28,7 +29,8 @@ const AboutPage: NextPage = () => {
         </Typography>
         <Typography paragraph>
           <CallIcon /> 606 60 50 70 <br />
-          <EmailIcon /> info@notable-reality.cz
+          <EmailIcon /> info@notable-reality.cz <br />
+          <LocationOnIcon /> Česká Třebová, Czech Republic
         </Typography>
         <Link href="/" passHref>
           <Button sx={{background: "#3562a6"}}variant="contained" color="primary">
